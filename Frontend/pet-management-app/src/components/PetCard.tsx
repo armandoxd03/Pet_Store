@@ -10,31 +10,32 @@ interface PetCardProps {
 const PetCard: React.FC<PetCardProps> = ({ pet, onDelete }) => {
     const handleDelete = (e: React.MouseEvent, id: number) => {
         e.preventDefault();
-        if (window.confirm("Are you sure you want to delete this pet?")) {
-            onDelete(id);
-        }
+        onDelete(id); // Directly call onDelete without confirmation
     };
 
-    // Default image if pet.image is empty
-    const petImage = pet.image || 'https://via.placeholder.com/250x250?text=No+Image';
+    const petImage = pet.image || 'https://via.placeholder.com/300x225?text=No+Image+Available';
 
     return (
         <div className="pet-card">
-            <img 
-                src={petImage} 
-                alt={pet.name} 
-                onError={(e) => {
-                    // Fallback if image fails to load
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/250x250?text=Image+Not+Found';
-                }}
-            />
-            <div className="pet-info">
-                <h3>{pet.name}</h3>
-                <p><strong>Species:</strong> {pet.species}</p>
-                <p><strong>Breed:</strong> {pet.breed}</p>
-                <p><strong>Gender:</strong> {pet.gender}</p>
-                <p><strong>Description:</strong> {pet.description}</p>
-                <p><strong>Price:</strong> ${pet.price.toFixed(2)}</p>
+            <Link to={`/pets/${pet.id}`} className="pet-card-link">
+                <div className="pet-image-container">
+                    <img 
+                        src={petImage} 
+                        alt={pet.name}
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x225?text=Image+Not+Found';
+                        }}
+                    />
+                </div>
+            </Link>
+            <div className="pet-content">
+                <h3 className="pet-name">{pet.name}</h3>
+                <div className="pet-details">
+                    <p><span className="detail-label">Species:</span> {pet.species}</p>
+                    <p><span className="detail-label">Breed:</span> {pet.breed}</p>
+                    <p><span className="detail-label">Gender:</span> {pet.gender}</p>
+                    <p className="pet-price">${pet.price.toFixed(2)}</p>
+                </div>
                 <div className="pet-actions">
                     <Link 
                         to={`/edit/${pet.id}`} 

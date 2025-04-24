@@ -1,25 +1,35 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import PetManagementPage from "./pages/PetManagementPage";
-import EditPetForm from "./components/EditPetForm";
+import AddPetPage from "./pages/AddPetPage";
 import "./index.css";
+import PetDetailPage from "./pages/PetDetailPage";
+import EditPetForm from "./components/EditPetForm";
+
+
 
 const App = () => {
     return (
-        <div className="container">
-            <header className="header">
-                <h1>Pet Adoption Center</h1>
-                <nav className="nav-links">
-                    <Link to="/">Home</Link>
-                    <Link to="/manage">Manage Pets</Link>
-                </nav>
-            </header>
+        <div className="app-container">
+            <nav className="navbar">
+                <h1>Pet Store</h1>
+                <div className="nav-links">
+                    <a href="/" className="nav-link">Home</a>
+                    <a href="/add" className="nav-link">Add Pet</a>
+                </div>
+            </nav>
             
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/manage" element={<PetManagementPage />} />
-                <Route path="/edit/:id" element={<EditPetForm />} />
-            </Routes>
+            <main className="main-content">
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/add" element={<AddPetPage />} />
+                    <Route path="/pets/:id" element={<PetDetailPage />} />
+                    <Route path="/edit/:id" element={<EditPetForm />} />
+
+
+                    
+                    
+                </Routes>
+            </main>
         </div>
     );
 };

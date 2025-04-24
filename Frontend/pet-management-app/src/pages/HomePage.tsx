@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchPets, searchPets, searchPetsByPrice } from "../api/petApi";
+import { fetchPets, searchPets, searchPetsByPrice, deletePet } from "../api/petApi";
 import { Pet } from "../types/Pet";
 import PetCard from "../components/PetCard";
 
@@ -35,7 +35,7 @@ const HomePage: React.FC = () => {
         const form = e.target as HTMLFormElement;
         const searchInput = form.elements.namedItem('search') as HTMLInputElement;
         setSearchTerm(searchInput.value);
-        setMaxPrice(null); // Reset price filter when doing text search
+        setMaxPrice(null); 
     };
 
     const handlePriceSearch = (e: React.FormEvent) => {
@@ -43,12 +43,25 @@ const HomePage: React.FC = () => {
         const form = e.target as HTMLFormElement;
         const priceInput = form.elements.namedItem('price') as HTMLInputElement;
         setMaxPrice(Number(priceInput.value));
-        setSearchTerm(""); // Reset text search when doing price filter
+        setSearchTerm("");
     };
 
     const resetFilters = () => {
         setSearchTerm("");
         setMaxPrice(null);
+    };
+
+    const handleDelete = async (id: number) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this pet?");
+        if (!confirmDelete) return;
+
+        try {
+            await deletePet(id);
+            setPets((prevPets) => prevPets.filter((pet) => pet.id !== id));
+        } catch (error) {
+            console.error("Failed to delete pet:", error);
+            alert("An error occurred while deleting the pet.");
+        }
     };
 
     if (loading) return <div className="loading">Loading pets...</div>;
@@ -88,11 +101,11 @@ const HomePage: React.FC = () => {
             <div className="pet-grid">
                 {pets.length > 0 ? (
                     pets.map((pet) => (
-                        <PetCard key={pet.id} pet={pet} onDelete={() => {}} />
+                        <PetCard key={pet.id} pet={pet} onDelete={handleDelete} />
                     ))
                 ) : (
                     <div className="no-results">
-                        No pets found matching your criteria.
+                        No Pets Available.
                     </div>
                 )}
             </div>

@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Pet {
@@ -16,7 +17,7 @@ public class Pet {
     private String species;
     private String breed;
     private String gender;
-    @Column(length = 10000)
+    @Lob
     private String image;
     @Column(length = 10000)
     private String description;

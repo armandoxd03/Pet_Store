@@ -56,7 +56,7 @@ const EditPetForm: React.FC = () => {
             if (id) {
                 await updatePet(parseInt(id), formData);
                 alert("Pet updated successfully!");
-                navigate("/manage");
+                navigate("/");
             }
         } catch (error) {
             console.error("Failed to update pet:", error);

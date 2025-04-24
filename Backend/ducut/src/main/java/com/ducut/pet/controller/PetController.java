@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 @RequestMapping("/ducut/pets")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -34,6 +35,12 @@ public class PetController {
     @PostMapping
     public Pet addPet(@RequestBody Pet pet) {
         return petRepository.save(pet);
+    }
+
+    // Add multiple pets in bulk
+    @PostMapping("/bulk")
+    public List<Pet> addPetsInBulk(@RequestBody List<Pet> pets) {
+        return petRepository.saveAll(pets);
     }
 
     // Update a pet by ID

@@ -53,11 +53,12 @@ a:active {
   font-weight: bold;
   padding: 8px 12px;
   border-radius: 4px;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .nav-links a:hover {
   background-color: #e8f4fc;
+  transform: translateY(-2px);
 }
 
 /* Forms */
@@ -95,11 +96,19 @@ a:active {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
+  transition: border-color 0.3s ease;
 }
 
 .form-group textarea {
   min-height: 120px;
   resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 /* Buttons */
@@ -112,16 +121,19 @@ a:active {
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .submit-btn {
   background-color: #2ecc71;
   color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .submit-btn:hover {
   background-color: #27ae60;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .delete-btn {
@@ -131,70 +143,204 @@ a:active {
 
 .delete-btn:hover {
   background-color: #c0392b;
-}
-
-.pet-actions .edit-btn {
-  text-decoration: none !important;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .edit-btn {
-  text-decoration: none !important;
   background-color: #365cf4;
   color: white;
   padding: 8px 16px;
   font-size: 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
   display: inline-block;
   text-align: center;
-  transition: background-color 0.3s;
 }
 
 .edit-btn:hover {
   background-color: #2a4bc0;
-  text-decoration: none !important;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Pet Cards */
+/* Enhanced Pet Cards */
 .pet-card {
   background: white;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  padding: 0;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  transition: all 0.3s ease;
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  height: 100%;
 }
 
-.pet-card img {
-  width: 250px;
+.pet-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.pet-image-container {
+  position: relative;
+  width: 100%;
   height: 250px;
-  object-fit: cover;
-  border-radius: 4px;
+  overflow: hidden;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
 }
 
-.pet-info {
+.pet-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.pet-card:hover .pet-image-container img {
+  transform: scale(1.05);
+}
+
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  padding: 8px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pet-image-container:hover .image-overlay {
+  opacity: 1;
+}
+
+.pet-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pet-name {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.pet-details {
+  margin-bottom: 15px;
   flex: 1;
 }
 
-.pet-info h3 {
-  margin-top: 0;
-  color: #2c3e50;
-}
-
-.pet-info p {
+.pet-details p {
   margin: 8px 0;
+  color: #555;
+  font-size: 0.95rem;
 }
 
-.pet-info strong {
-  color: #555;
+.detail-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.pet-description {
+  margin: 15px 0 !important;
+  line-height: 1.5;
+  color: #666;
+}
+
+.pet-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2ecc71;
+  margin: 15px 0 10px 0 !important;
 }
 
 .pet-actions {
-  margin-top: 15px;
   display: flex;
   gap: 10px;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Image Modal Styles */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.modal-content img {
+  max-width: 100%;
+  max-height: 80vh;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-modal:hover {
+  background: rgba(0,0,0,0.9);
+}
+
+.image-caption {
+  padding: 15px;
+  text-align: center;
+  background: white;
+  border-top: 1px solid #eee;
+}
+
+.image-caption h3 {
+  margin: 0 0 5px 0;
+  color: #2c3e50;
+}
+
+.image-caption p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
 }
 
 /* Search Bar */
@@ -231,6 +377,12 @@ a:active {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-bar button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .search-bar button[type="button"] {
@@ -273,5 +425,10 @@ a:active {
   .search-bar form {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .modal-content {
+    max-width: 95%;
+    max-height: 95%;
   }
 }

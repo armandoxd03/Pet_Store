@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { addPet } from "../api/petApi";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { fetchPetById, updatePet } from "../api/petApi";
 import { Pet } from "../types/Pet";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-interface AddPetFormProps {
-    onPetAdded: () => void;
-}
-
-const AddPetForm: React.FC<AddPetFormProps> = ({ onPetAdded }) => {
+const EditPetForm: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<Omit<Pet, "id">>({
         name: "",
         species: "",
@@ -17,8 +15,31 @@ const AddPetForm: React.FC<AddPetFormProps> = ({ onPetAdded }) => {
         description: "",
         price: 0,
     });
+    const [loading, setLoading] = useState(true);
 
-    const navigate = useNavigate(); // Initialize navigate
+    useEffect(() => {
+        const loadPet = async () => {
+            try {
+                if (id) {
+                    const pet = await fetchPetById(parseInt(id));
+                    setFormData({
+                        name: pet.name,
+                        species: pet.species,
+                        breed: pet.breed,
+                        gender: pet.gender,
+                        image: pet.image,
+                        description: pet.description,
+                        price: pet.price,
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to load pet:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadPet();
+    }, [id]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -32,27 +53,22 @@ const AddPetForm: React.FC<AddPetFormProps> = ({ onPetAdded }) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await addPet(formData);
-            onPetAdded();
-            setFormData({
-                name: "",
-                species: "",
-                breed: "",
-                gender: "",
-                image: "",
-                description: "",
-                price: 0,
-            });
-            alert("Pet added successfully!");
-            navigate("/"); // Navigate to homepage after submit
+            if (id) {
+                await updatePet(parseInt(id), formData);
+                alert("Pet updated successfully!");
+                navigate("/manage");
+            }
         } catch (error) {
-            console.error("Failed to add pet:", error);
-            alert("Error adding pet. Please try again.");
+            console.error("Failed to update pet:", error);
+            alert("Error updating pet. Please try again.");
         }
     };
 
+    if (loading) return <div>Loading pet data...</div>;
+
     return (
         <form className="pet-form" onSubmit={handleSubmit}>
+            <h2>Edit Pet</h2>
             <div className="form-group">
                 <label>Name:</label>
                 <input
@@ -124,9 +140,9 @@ const AddPetForm: React.FC<AddPetFormProps> = ({ onPetAdded }) => {
                     required
                 />
             </div>
-            <button type="submit" className="submit-btn">Add Pet</button>
+            <button type="submit" className="submit-btn">Update Pet</button>
         </form>
     );
 };
 
-export default AddPetForm;
+export default EditPetForm;
